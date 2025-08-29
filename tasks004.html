@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searchable & Sortable Task List</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ... (all the previous CSS is the same) ... */
+        .task-container {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .task-title {
+            margin: 0;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-title:hover {
+            background-color: #f0f0f0;
+        }
+        .task-description {
+            padding: 0 15px 15px 15px;
+            border-top: 1px solid #eee;
+            display: none; 
+        }
+        .task-description.visible {
+            display: block;
+        }
+        .icon::before {
+            content: '+';
+            font-size: 1.2em;
+            color: #007bff;
+        }
+        .task-title.active .icon::before {
+            content: '−';
+        }
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px; /* Adjusted margin */
+            box-sizing: border-box;
+        }
+        /* NEW CSS for the sort buttons */
+        .sort-controls {
+            margin-bottom: 20px;
+        }
+        .sort-controls button {
+            padding: 8px 12px;
+            margin-right: 5px;
+            border: 1px solid #007bff;
+            background-color: #fff;
+            color: #007bff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .sort-controls button:hover {
+            background-color: #e9f4ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Team Tasks</h1>
+        <p>Search, sort, and expand tasks.</p>
+
+        <input type="text" id="searchInput" onkeyup="filterTasks()" placeholder="Search for a task...">
+
+        <div class="sort-controls">
+            <strong>Sort by:</strong>
+            <button onclick="sortTasks('asc')">Time (Shortest First)</button>
+            <button onclick="sortTasks('desc')">Time (Longest First)</button>
+        </div>
+
+        <div id="taskList">
+
+            <div class="task-container" data-time="1.5">
+                <h3 class="task-title" onclick="toggleDescription(this)">
+                    <span>Task 1: Sweeping the Floor (1.5 hours)</span>
+                    <span class="icon"></span>
+                </h3>
+                <div class="task-description">
+                    <ul>
+                        <li>Get a broom.</li>
+                        <li>Sweep the entire floor area.</li>
+                        <li>Use a dustpan to collect the debris and dispose of it in the trash.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="task-container" data-time="2.0">
+                <h3 class="task-title" onclick="toggleDescription(this)">
+                    <span>Task 2: Weekly Report (2 hours)</span>
+                    <span class="icon"></span>
+                </h3>
+                <div class="task-description">
+                    <p>The weekly report needs to be compiled using data from the sales dashboard.</p>
+                </div>
+            </div>
+
+            <div class="task-
