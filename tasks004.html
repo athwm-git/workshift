@@ -6,7 +6,6 @@
     <title>Searchable & Sortable Task List</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ... (all the previous CSS is the same) ... */
         .task-container {
             margin-bottom: 15px;
             border: 1px solid #ddd;
@@ -43,10 +42,9 @@
         #searchInput {
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px; /* Adjusted margin */
+            margin-bottom: 10px;
             box-sizing: border-box;
         }
-        /* NEW CSS for the sort buttons */
         .sort-controls {
             margin-bottom: 20px;
         }
@@ -89,7 +87,6 @@
                     <ul>
                         <li>Get a broom.</li>
                         <li>Sweep the entire floor area.</li>
-                        <li>Use a dustpan to collect the debris and dispose of it in the trash.</li>
                     </ul>
                 </div>
             </div>
@@ -100,8 +97,70 @@
                     <span class="icon"></span>
                 </h3>
                 <div class="task-description">
-                    <p>The weekly report needs to be compiled using data from the sales dashboard.</p>
+                    <p>Compile the weekly report from the sales dashboard.</p>
                 </div>
             </div>
 
-            <div class="task-
+            <div class="task-container" data-time="0.5">
+                <h3 class="task-title" onclick="toggleDescription(this)">
+                    <span>Task 3: Water the Plants (0.5 hours)</span>
+                    <span class="icon"></span>
+                </h3>
+                <div class="task-description">
+                    <p>Check all indoor plants and provide water if the soil is dry.</p>
+                </div>
+            </div>
+
+        </div> 
+    </div>
+
+    <script>
+    function toggleDescription(element) {
+        const description = element.nextElementSibling;
+        description.classList.toggle('visible');
+        element.classList.toggle('active');
+    }
+
+    function sortTasks(direction) {
+        const taskList = document.getElementById('taskList');
+        // -- FIX WAS HERE -- //
+        // Changed to querySelectorAll, which works correctly on an element like taskList.
+        const tasks = Array.from(taskList.querySelectorAll('.task-container'));
+
+        tasks.sort((a, b) => {
+            const timeA = parseFloat(a.dataset.time);
+            const timeB = parseFloat(b.dataset.time);
+
+            if (direction === 'asc') {
+                return timeA - timeB;
+            } else {
+                return timeB - timeA;
+            }
+        });
+
+        tasks.forEach(task => taskList.appendChild(task));
+    }
+
+    function filterTasks() {
+        let input = document.getElementById('searchInput');
+        let filter = input.value.toLowerCase();
+        let taskList = document.getElementById('taskList');
+        // -- FIX WAS HERE -- //
+        // Changed to querySelectorAll here as well for consistency and correctness.
+        let tasks = taskList.querySelectorAll('.task-container');
+
+        for (let i = 0; i < tasks.length; i++) {
+            let task = tasks[i];
+            let textContent = task.textContent || task.innerText;
+
+            if (textContent.toLowerCase().indexOf(filter) > -1) {
+                task.style.display = "";
+            } else {
+                task.style.display = "none";
+            }
+        }
+    }
+    </script>
+
+</body>
+</html>
