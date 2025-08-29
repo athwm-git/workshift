@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searchable Task List</title>
+    <link rel="stylesheet" href="style.css"> <style>
+        /* Styles specific to this task page */
+        .task-container {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .task-title {
+            margin: 0;
+            padding: 15px;
+            cursor: pointer; /* Makes the title look clickable */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-title:hover {
+            background-color: #f0f0f0;
+        }
+        .task-description {
+            padding: 0 15px 15px 15px;
+            border-top: 1px solid #eee;
+            /* The description is hidden by default */
+            display: none; 
+        }
+        .task-description.visible {
+            /* This class will be added by JavaScript to show the description */
+            display: block;
+        }
+        .icon::before {
+            content: '+'; /* Show plus sign by default */
+            font-size: 1.2em;
+            color: #007bff;
+        }
+        .task-title.active .icon::before {
+            content: '−'; /* Show minus sign when active */
+        }
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Team Tasks</h1>
+        <p>Use the search box below to filter tasks. Click on a task title to expand or collapse its description.</p>
+
+        <input type="text" id="searchInput" onkeyup="filterTasks()" placeholder="Search for a task...">
+
+        <div id="taskList">
+
+            <div class="task-container">
+                <h3 class="task-title" onclick="toggleDescription(this)">
+                    <span>Task 1: Sweeping the Floor</span>
+                    <span class="icon"></span>
+                </h3>
+                <div class="task-description">
+                    <ul>
+                        <li>Get a broom.</li>
+                        <li>Sweep the entire floor area.</li>
+                        <li>Use a dustpan to collect the debris and dispose of it in the trash.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="task-container">
+                <h3 class="task-title" onclick="toggleDescription(this)">
+                    <span>Task 2: Weekly Report</span>
+                    <span class="icon"></span>
+                </h3>
+                <div class="task-description">
+                    <p>The weekly report needs to be compiled using data from the sales dashboard. Focus on the following metrics:</p>
+                    <ul>
+                        <li>Total sales volume.</li>
+                        <li>New customer acquisitions.</li>
+                        <li>Top-performing product.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="task-container">
+                <h3 class="task-title" onclick="toggleDescription(this)">
+                    <span>Task 3: Water the Plants</span>
+                    <span class="icon"></span>
+                </h3>
+                <div class="task-description">
+                    <p>Check all indoor plants. If the soil is dry, provide water. Do not over-water the cactus.</p>
+                </div>
+            </div>
+
+        </div> </div>
+
+    <script>
+    // NEW function to toggle the description's visibility
+    function toggleDescription(element) {
+        // Find the description div that comes right after the title
+        const description = element.nextElementSibling;
+        // Toggle the 'visible' class to show/hide it
+        description.classList.toggle('visible');
+        // Toggle the 'active' class on the title to change the icon
+        element.classList.toggle('active');
+    }
+
+    // Your existing filter function - no changes needed!
+    function filterTasks() {
+        let input = document.getElementById('searchInput');
+        let filter = input.value.toLowerCase();
+        let taskList = document.getElementById('taskList');
+        let tasks = taskList.getElementsByClassName('task-container');
+
+        for (let i = 0; i < tasks.length; i++) {
+            let task = tasks[i];
+            let textContent = task.textContent || task.innerText;
+
+            if (textContent.toLowerCase().indexOf(filter) > -1) {
+                task.style.display = "";
+            } else {
+                task.style.display = "none";
+            }
+        }
+    }
+    </script>
+
+</body>
+</html>
