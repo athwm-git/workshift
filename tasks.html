@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searchable Task List</title>
+    <link rel="stylesheet" href="style.css"> <style>
+        /* Styles specific to this task page */
+        .task-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .task-container h3 {
+            margin-top: 0;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Team Tasks</h1>
+        <p>Use the search box below to filter tasks by title or description.</p>
+
+        <input type="text" id="searchInput" onkeyup="filterTasks()" placeholder="Search for a task...">
+
+        <div id="taskList">
+
+            <div class="task-container">
+                <h3>Task 1: Sweeping the Floor</h3>
+                <div class="task-description">
+                    <ul>
+                        <li>Get a broom.</li>
+                        <li>Sweep the entire floor area.</li>
+                        <li>Use a dustpan to collect the debris and dispose of it in the trash.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="task-container">
+                <h3>Task 2: Weekly Report</h3>
+                <div class="task-description">
+                    <p>The weekly report needs to be compiled using data from the sales dashboard. Focus on the following metrics:</p>
+                    <ul>
+                        <li>Total sales volume.</li>
+                        <li>New customer acquisitions.</li>
+                        <li>Top-performing product.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="task-container">
+                <h3>Task 3: Water the Plants</h3>
+                <div class="task-description">
+                    <p>Check all indoor plants. If the soil is dry, provide water. Do not over-water the cactus.</p>
+                </div>
+            </div>
+
+        </div> </div>
+
+    <script>
+    function filterTasks() {
+        // 1. Get the user's input and convert it to lowercase
+        let input = document.getElementById('searchInput');
+        let filter = input.value.toLowerCase();
+
+        // 2. Get the container for the list of tasks
+        let taskList = document.getElementById('taskList');
+        let tasks = taskList.getElementsByClassName('task-container');
+
+        // 3. Loop through all the task containers
+        for (let i = 0; i < tasks.length; i++) {
+            let task = tasks[i];
+            // Get the text content from the title and description within this task
+            let textContent = task.textContent || task.innerText;
+
+            // 4. Check if the task's text includes the search filter
+            if (textContent.toLowerCase().indexOf(filter) > -1) {
+                // If it matches, make sure the task is visible
+                task.style.display = "";
+            } else {
+                // If it does NOT match, hide the task
+                task.style.display = "none";
+            }
+        }
+    }
+    </script>
+
+</body>
+</html>
