@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Task List</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* All of your existing CSS stays exactly the same. No changes needed here. */
+        .task-container { margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9; }
+        .task-title { margin: 0; padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .task-title:hover { background-color: #f0f0f0; }
+        .task-description { padding: 0 15px 15px 15px; border-top: 1px solid #eee; display: none; }
+        .task-description.visible { display: block; }
+        .icon::before { content: '+'; font-size: 1.2em; color: #007bff; }
+        .task-title.active .icon::before { content: '−'; }
+        #searchInput { width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; }
+        .sort-controls { margin-bottom: 20px; }
+        .sort-controls button { padding: 8px 12px; margin-right: 5px; border: 1px solid #007bff; background-color: #fff; color: #007bff; border-radius: 4px; cursor: pointer; }
+        .sort-controls button:hover { background-color: #e9f4ff; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Team Tasks</h1>
+        <p>Search, sort, and expand tasks.</p>
+
+        <input type="text" id="searchInput" onkeyup="filterTasks()" placeholder="Search for a task...">
+
+        <div class="sort-controls">
+            <strong>Sort by:</strong>
+            <button onclick="sortTasks('asc')">Time (Shortest First)</button>
+            <button onclick="sortTasks('desc')">Time (Longest First)</button>
+        </div>
+
+        <div id="taskList"></div> 
+    </div>
+
+    <script>
+    // =================================================================
+    // STEP 1: YOUR TASK DATA LIVES HERE
+    // To add, edit, or remove tasks, you only need to change this list.
+    // =================================================================
+    const tasksData = [
+        {
+            time: 1.5,
+            title: "Sweeping the Floor",
+            description: `<ul><li>Get a broom.</li><li>Sweep the entire floor area.</li><li>Use a dustpan to collect the debris.</li></ul>`
+        },
+        {
+            time: 2.0,
+            title: "Weekly Report",
+            description: `<p>Compile the weekly report from the sales dashboard.</p>`
+        },
+        {
+            time: 0.5,
+            title: "Water the Plants",
+            description: `<p>Check all indoor plants and provide water if the soil is dry.</p>`
+        },
+        {
+            time: 3.0,
+            title: "Organize the Storage Closet",
+            description: `<p>Sort items by category and make sure everything is labeled correctly.</p>`
+        }
+    ];
+
+    // =================================================================
+    // STEP 2: RENDER THE TASKS
+    // This new function builds the HTML from your data list above.
+    // =================================================================
+    function renderTasks() {
+        const taskList = document.getElementById('taskList');
+        taskList.innerHTML = ''; // Clear the list first
+
+        tasksData.forEach(task => {
+            // Create the HTML for a single task using the data
+            const taskElementHTML = `
+                <div class="task-container" data-time="${task.time}">
+                    <h3 class="task-title" onclick="toggleDescription(this)">
+                        <span>${task.title} (${task.time} hours)</span>
+                        <span class="icon"></span>
+                    </h3>
+                    <div class="task-description">
+                        ${task.description}
+                    </div>
+                </div>
+            `;
+            // Add the new task's HTML to the list
+            taskList.innerHTML += taskElementHTML;
+        });
+    }
+
+    // =================================================================
+    // STEP 3: EXISTING FUNCTIONS
+    // Your other functions work perfectly with this new setup.
+    // =================================================================
+    function toggleDescription(element) {
+        const description = element.nextElementSibling;
+        description.classList.toggle('visible');
+        element.classList.toggle('active');
+    }
+
+    function sortTasks(direction) {
+        const taskList = document.getElementById('taskList');
+        const tasks = Array.from(taskList.querySelectorAll('.task-container'));
+
+        tasks.sort((a, b) => {
+            const timeA = parseFloat(a.dataset.time);
+            const timeB = parseFloat(b.dataset.time);
+            return direction === 'asc' ? timeA - timeB : timeB - timeA;
+        });
+
+        tasks.forEach(task => taskList.appendChild(task));
+    }
+
+    function filterTasks() {
+        let input = document.getElementById('searchInput');
+        let filter = input.value.toLowerCase();
+        let taskList = document.getElementById('taskList');
+        let tasks = taskList.querySelectorAll('.task-container');
+
+        tasks.forEach(task => {
+            let textContent = task.textContent || task.innerText;
+            if (textContent.toLowerCase().includes(filter)) {
+                task.style.display = "";
+            } else {
+                task.style.display = "none";
+            }
+        });
+    }
+
+    // Finally, call the render function when the page loads to build the initial list
+    renderTasks();
+    </script>
+
+</body>
+</html>
